@@ -1,4 +1,4 @@
-package telran.spring.service.calculator;
+package telran.spring.calculator.service;
 
 public interface CalculatorService {
 

@@ -3,7 +3,7 @@ package telran.spring.calculator.controller;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import telran.spring.service.calculator.CalculatorService;
+import telran.spring.calculator.service.CalculatorService;
 
 @RestController
 @RequestMapping("calculator")

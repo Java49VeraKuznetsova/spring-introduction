@@ -1,4 +1,4 @@
-package telran.spring.service.calculator;
+package telran.spring.calculator.service;
 
 import org.springframework.stereotype.Service;
 
@@ -19,15 +19,13 @@ public class CalculatorServiceImpl implements CalculatorService {
 
 	@Override
 	public double substract(double op1, double op2) {
-		// TODO Auto-generated method stub
 		return op1-op2;
 	}
 
 	@Override
 	public double divide(double op1, double op2) {
 		
-		//?? divide on 0??
-		return op2 == 0 ? 0 : op1 / op2;
+		return op1 / op2;
 	}
 
 }
