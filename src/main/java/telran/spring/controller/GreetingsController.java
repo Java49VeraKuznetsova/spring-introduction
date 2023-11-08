@@ -30,7 +30,7 @@ public class GreetingsController {
 		return greetingsService.getPerson(id);
 	}
 	
-	//TODO update following control end point methods for HW #57 according to updated service
+	//update following control end point methods for HW #57 according to updated service
 	//@PostMapping()
 	String addName(@RequestBody IdName idName) {
 	return greetingsService.addName(idName);
@@ -64,7 +64,7 @@ Person deletePerson (@PathVariable long id) {
 		return greetingsService.getPersonsByCity(city);
 	}
 
-//TODO
+//
 //end points for getting person by ID and getting persons by city
 //see service
 }

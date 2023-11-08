@@ -14,7 +14,6 @@ public class GreetingsServiceImpl implements GreetingsService {
  
    Map<Long, Person> greetingsMapPerson = new HashMap<>(Map.of(123l, person1, 124l, person2, 125l, person3));
    
-  // List<Person> greetingsMapPerson1 = new ArrayList<>(List.of(person1, person2, person3));
    @Override
 	public String getGreetings(long id) {
 		String name = greetingsMap.getOrDefault(id, "Unknown Guest");
@@ -23,12 +22,10 @@ public class GreetingsServiceImpl implements GreetingsService {
    
 	@Override
 	public Person getPerson(long id) {
-		Person personUnknown = new Person (0l, "Unknown Guest", "now city");
+		Person personUnknown = new Person (0l, "Unknown Guest", "no city");
 		Person personNew = greetingsMapPerson.getOrDefault(id,personUnknown);
 		return personNew;
-		//Vladimir
-	//	Person person = personsMap.get(id);
-		//if person == null - IllegalStateException
+		//if without personUnknown - that need's  IllegalStateException
 	}
 	
 	@Override
@@ -42,7 +39,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 	
 	@Override
 	public Person addPerson(Person person) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		Person personNew =  greetingsMapPerson.putIfAbsent(person.id(),person);
 		if(personNew != null ) {
 			throw new IllegalStateException(person.id() + " name with given ID already exists");
@@ -66,7 +63,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 		if (person == null) {
 			throw new IllegalStateException(id + " not found");
 		}
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		return person;
 	}
 	@Override
@@ -91,9 +88,10 @@ public class GreetingsServiceImpl implements GreetingsService {
 
 	@Override
 	public List<Person> getPersonsByCity(String city) {
-		// TODO Auto-generated method stub
+		//  Auto-generated method stub
 		List <Person> personsByCity = new ArrayList<>();
 	  greetingsMapPerson.forEach((k, v) -> {
+		  //better to use smth as compareToIgnoreCase
 		 if( v.toString().contains(city)) {
 				personsByCity.add((Person) v);
 		 }
