@@ -34,11 +34,12 @@ public class GreetingsController {
 	}
 	@DeleteMapping("{id}")
 	Person deleteName(@PathVariable long id) {
-		log.debug("method: deletePerson,rceived id {}", id);
+		log.debug("method: deletePerson,received id {}", id);
 		return greetingsService.deletePerson(id);
 	}
 	@GetMapping("city/{city}")
 	List<Person> getPersonsByCity(@PathVariable String city) {
+		log.debug("method: getPersonByCity,received city {}", city);
 		List<Person> result =  greetingsService.getPersonsByCity(city);
 		if(result.isEmpty()) {
 			log.warn("received empty list for city: {}", city);

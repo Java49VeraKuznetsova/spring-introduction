@@ -15,7 +15,7 @@ public class GreetingsServiceImpl implements GreetingsService {
     Map<Long, Person> greetingsMap = new HashMap<>();
 	@Override
 	public String getGreetings(long id) {
-		log.debug("service method getGreetings received id {}", id);
+		log.info("service method getGreetings received id {}", id);
 		Person person =  greetingsMap.get(id);
 		String name = person == null ? "Unknown guest" : person.name();
 		return "Hello, " + name;
@@ -23,7 +23,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 	
 	@Override
 	public Person getPerson(long id) {
-		log.debug("service method getPerson received id {}", id);
+		log.info("service method getPerson received id {}", id);
 		return greetingsMap.get(id);
 	}
 	@Override
@@ -35,7 +35,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 	}
 	@Override
 	public Person addPerson(Person person) {
-		log.debug("service method addPerson received {}", person);
+		log.info("service method addPerson received {}", person);
 		long id = person.id();
 		if (greetingsMap.containsKey(id) ){
 			throw new IllegalStateException(String.format("person with id %d already exists", id));
@@ -45,7 +45,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 	}
 	@Override
 	public Person deletePerson(long id) {
-		log.debug("service method deletePerson received id {}", id);
+		log.info("service method deletePerson received id {}", id);
 		if (!greetingsMap.containsKey(id) ){
 			throw new NotFoundException(String.format("person with id %d doesn't exist", id));
 		}
@@ -53,7 +53,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 	}
 	@Override
 	public Person updatePerson(Person person) {
-		log.debug("service method updatePerson received {}", person);
+		log.info("service method updatePerson received {}", person);
 		long id = person.id();
 		if (!greetingsMap.containsKey(id) ){
 			throw new NotFoundException(String.format("person with id %d doesn't exist", id));
