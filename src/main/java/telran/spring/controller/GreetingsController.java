@@ -29,10 +29,12 @@ public class GreetingsController {
 	}
 	@PutMapping
 	Person updatePerson(@RequestBody @Valid Person person) {
+		log.debug("method: updatePerson, recieived {}", person);
 		return greetingsService.updatePerson(person);
 	}
 	@DeleteMapping("{id}")
 	Person deleteName(@PathVariable long id) {
+		log.debug("method: deletePerson,rceived id {}", id);
 		return greetingsService.deletePerson(id);
 	}
 	@GetMapping("city/{city}")
@@ -47,6 +49,7 @@ public class GreetingsController {
 	}
 	@GetMapping("id/{id}")
 	Person getPerson(@PathVariable long id) {
+		log.debug("method getPerson, received id {}", id);
 		return greetingsService.getPerson(id);
 	}
 	
