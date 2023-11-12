@@ -2,10 +2,11 @@ package telran.spring;
 
 import jakarta.validation.constraints.*;
 
-public record Person(long id, @Pattern(regexp = "[A-Z][a-z]{2,}") String name,
+public record Person(@NotNull long id, 
+		@Pattern(regexp = "[A-Z][a-z]{2,}",
+		message = "Wrong name structure ") String name,
 		@NotEmpty String city, 
-		//@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$") String email,
-		@Email String email,
-		@Pattern (message = "wrong phone number ", regexp = "9725\\d{8}") String phone) {
-
+		@Email @NotEmpty String email,
+		@Pattern(regexp = "(\\+972-?|0)5\\d-?\\d{7}", message="not Israel mobile phone") @NotEmpty String phone) {
+   
 }

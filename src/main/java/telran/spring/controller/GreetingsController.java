@@ -19,7 +19,7 @@ public class GreetingsController {
 	final GreetingsService greetingsService;
 	@GetMapping("{id}")
 	String getGreetings(@PathVariable long id) {
-		log.debug("method getGreetings, received id {}", id);
+		log.debug("method: getGreetings, received id {}", id);
 		return greetingsService.getGreetings(id);
 	}
 	@PostMapping
@@ -29,18 +29,19 @@ public class GreetingsController {
 	}
 	@PutMapping
 	Person updatePerson(@RequestBody @Valid Person person) {
-		log.debug("method: updatePerson, recieived {}", person);
+		log.debug("method: updatePerson, received {}", person);
 		return greetingsService.updatePerson(person);
 	}
 	@DeleteMapping("{id}")
-	Person deleteName(@PathVariable long id) {
-		log.debug("method: deletePerson,received id {}", id);
+	Person deletePerson(@PathVariable long id) {
+		log.debug("method: deletePerson, received id {}", id);
 		return greetingsService.deletePerson(id);
 	}
 	@GetMapping("city/{city}")
 	List<Person> getPersonsByCity(@PathVariable String city) {
-		log.debug("method: getPersonByCity,received city {}", city);
+		log.debug("method: getPersonsByCity, received city {}", city);
 		List<Person> result =  greetingsService.getPersonsByCity(city);
+		
 		if(result.isEmpty()) {
 			log.warn("received empty list for city: {}", city);
 		} else {
@@ -50,7 +51,7 @@ public class GreetingsController {
 	}
 	@GetMapping("id/{id}")
 	Person getPerson(@PathVariable long id) {
-		log.debug("method getPerson, received id {}", id);
+		log.debug("method: getPerson, received id {}", id);
 		return greetingsService.getPerson(id);
 	}
 	
