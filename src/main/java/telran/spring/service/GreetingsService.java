@@ -11,5 +11,7 @@ public interface GreetingsService {
 	Person addPerson(Person person);
 	Person deletePerson(long id);
 	Person updatePerson(Person person);
+	void save(String fileName);
+	void restore(String fileName);
 
 }

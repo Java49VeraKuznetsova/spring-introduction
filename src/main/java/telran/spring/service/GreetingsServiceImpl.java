@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import telran.exceptions.NotFoundException;
 import telran.spring.Person;
@@ -13,6 +16,12 @@ import telran.spring.Person;
 @Slf4j
 public class GreetingsServiceImpl implements GreetingsService {
     Map<Long, Person> greetingsMap = new HashMap<>();
+    @Value("${app.greeting.message:Hello}")
+    String greetingMessage;
+    @Value("${app.unknown.name:unknown quest}")
+    String unknownName;
+    @Value("${app.file.name:persons.data}")
+    String fileName;
 	@Override
 	public String getGreetings(long id) {
 		
@@ -20,13 +29,13 @@ public class GreetingsServiceImpl implements GreetingsService {
 //		String name = person == null ? "Unknown guest" : person.name();
 		String name = "";
 		if (person == null) {
-			name = "Unknown guest";
+			name = unknownName;
 			log.warn("person with id {} not found", id);
 		} else {
 			name = person.name();
 			log.debug("person name is {}", name);
 		}
-		return "Hello, " + name;
+		return String.format("%s, %s", greetingMessage, name);
 	}
 	
 	@Override
@@ -75,6 +84,29 @@ public class GreetingsServiceImpl implements GreetingsService {
 		greetingsMap.put(id, person);
 		log.debug("person with id {} has been update", person.id());
 		return person;
+	}
+
+	@Override
+	public void save(String fileName) {
+		// TODO saving persons data into ObjectOutputStream
+		log.info("restored from file");
+		
+	}
+
+	@Override
+	public void restore(String fileName) {
+		//TODO restoring from file using ObjectInputStream
+		restore(fileName);
+		
+		
+	}
+	@PostConstruct
+	void restoreFromFile() {
+		
+	}
+	@PreDestroy
+	void saveToFile() {
+		save(fileName);
 	}
 
 }
