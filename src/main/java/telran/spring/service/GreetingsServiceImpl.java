@@ -107,6 +107,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 			stream.writeObject(listPerson);
 		} catch (Exception e) {
 			//throw new RuntimeException(e);
+			
 			log.error("smth wrong to write into file " + fileName);
 			throw new RuntimeException(String.format("smth wrong to write into file %s", fileName));
 			

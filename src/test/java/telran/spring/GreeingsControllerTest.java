@@ -100,10 +100,11 @@ public class GreeingsControllerTest {
 	  .getContentAsString();
 	   assertEquals("must be a well-formed email address", response);
   }
-
-  
-  
-  @Test
+ // @Test
+void AddPersonWrongID () throws Exception{
+	
+}
+    @Test
   void normalFlowUpdatePerson() throws Exception {
 	  mockMvc.perform(put("http://localhost:8080/greetings")
 			  .contentType(MediaType.APPLICATION_JSON)
@@ -111,6 +112,7 @@ public class GreeingsControllerTest {
 	  .andDo(print())
 	  .andExpect(status().isOk());
   }
+    
   @Test
   void normalFlowGetPerson() throws Exception {
 	  mockMvc.perform(get("http://localhost:8080/greetings/id/123")
