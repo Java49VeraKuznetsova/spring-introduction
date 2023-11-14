@@ -1,8 +1,15 @@
 package telran.spring.service;
 
+import java.io.*;
+import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+//import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,8 +27,9 @@ public class GreetingsServiceImpl implements GreetingsService {
     String greetingMessage;
     @Value("${app.unknown.name:unknown quest}")
     String unknownName;
-    @Value("${app.file.name:persons.data}")
+    @Value("${app.file.name:persons.data:personsSpring.data}")
     String fileName;
+  //  String fileName = "personsSpring.data";
 	@Override
 	public String getGreetings(long id) {
 		
@@ -89,24 +97,60 @@ public class GreetingsServiceImpl implements GreetingsService {
 	@Override
 	public void save(String fileName) {
 		// TODO saving persons data into ObjectOutputStream
-		log.info("restored from file");
+		log.info("saved to file");
+		ArrayList<Person> listPerson = (ArrayList<Person>) greetingsMap.values()
+				.stream()
+				.collect(Collectors.toList());
+		if (Files.exists(Path.of(fileName))){
+		try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+			
+			stream.writeObject(listPerson);
+		} catch (Exception e) {
+			//throw new RuntimeException(e);
+			log.error("smth wrong to write into file " + fileName);
+			throw new RuntimeException(String.format("smth wrong to write into file %s", fileName));
+			
+		}
+		} else {
+			log.error("no file for save "+fileName);
+		}
+		
 		
 	}
 
 	@Override
-	public void restore(String fileName) {
+	public void restore(String fileName)  {
 		//TODO restoring from file using ObjectInputStream
-		restore(fileName);
+		log.info("restored from file");
+		//restore(fileName);
+		if (Files.exists(Path.of(fileName))){
+		try(ObjectInputStream stream = new ObjectInputStream(new FileInputStream(fileName))) {
+			List<Person> listPerson = (List<Person>) stream.readObject();
+			
+			listPerson
+			.forEach(p -> addPerson(p));
+		
+					
+		}  catch (Exception e) {
+			log.error("smth wrong to read from file " + fileName);
+			//throw new RuntimeException(e.toString());
+			throw new RuntimeException(String.format("smth wrong to read from file %s", fileName));
+		}
+		} else {
+			log.error("no file for restore "+fileName);
+		}
 		
 		
 	}
 	@PostConstruct
 	void restoreFromFile() {
-		
+		log.info("restore file "+fileName);
+		restore(fileName);
 	}
 	@PreDestroy
 	void saveToFile() {
 		save(fileName);
+		log.info("save file "+fileName);
 	}
 
 }

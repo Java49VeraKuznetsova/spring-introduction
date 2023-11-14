@@ -100,6 +100,9 @@ public class GreeingsControllerTest {
 	  .getContentAsString();
 	   assertEquals("must be a well-formed email address", response);
   }
+
+  
+  
   @Test
   void normalFlowUpdatePerson() throws Exception {
 	  mockMvc.perform(put("http://localhost:8080/greetings")
