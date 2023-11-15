@@ -96,7 +96,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 
 	@Override
 	public void save(String fileName) {
-		// TODO saving persons data into ObjectOutputStream
+		//  saving persons data into ObjectOutputStream
 		log.info("saved to file");
 		ArrayList<Person> listPerson = (ArrayList<Person>) greetingsMap.values()
 				.stream()
@@ -106,8 +106,8 @@ public class GreetingsServiceImpl implements GreetingsService {
 			
 			stream.writeObject(listPerson);
 		} catch (Exception e) {
+			 // on webinar: this better: 
 			//throw new RuntimeException(e);
-			
 			log.error("smth wrong to write into file " + fileName);
 			throw new RuntimeException(String.format("smth wrong to write into file %s", fileName));
 			
@@ -121,9 +121,8 @@ public class GreetingsServiceImpl implements GreetingsService {
 
 	@Override
 	public void restore(String fileName)  {
-		//TODO restoring from file using ObjectInputStream
+		// restoring from file using ObjectInputStream
 		log.info("restored from file");
-		//restore(fileName);
 		if (Files.exists(Path.of(fileName))){
 		try(ObjectInputStream stream = new ObjectInputStream(new FileInputStream(fileName))) {
 			List<Person> listPerson = (List<Person>) stream.readObject();
@@ -134,6 +133,7 @@ public class GreetingsServiceImpl implements GreetingsService {
 					
 		}  catch (Exception e) {
 			log.error("smth wrong to read from file " + fileName);
+			//on webinar: this better:
 			//throw new RuntimeException(e.toString());
 			throw new RuntimeException(String.format("smth wrong to read from file %s", fileName));
 		}
