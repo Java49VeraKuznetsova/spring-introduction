@@ -1,16 +1,8 @@
 package telran.spring.service;
 
-import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-//import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import java.io.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +17,14 @@ public class GreetingsServiceImpl implements GreetingsService {
     Map<Long, Person> greetingsMap = new HashMap<>();
     @Value("${app.greeting.message:Hello}")
     String greetingMessage;
-    @Value("${app.unknown.name:unknown quest}")
+    @Value("${app.unknown.name:unknown guest}")
     String unknownName;
-    @Value("${app.file.name:persons.data:personsSpring.data}")
+    @Value("${app.file.name:persons.data}")
     String fileName;
-  //  String fileName = "personsSpring.data";
 	@Override
 	public String getGreetings(long id) {
 		
 		Person person =  greetingsMap.get(id);
-//		String name = person == null ? "Unknown guest" : person.name();
 		String name = "";
 		if (person == null) {
 			name = unknownName;
@@ -96,62 +86,40 @@ public class GreetingsServiceImpl implements GreetingsService {
 
 	@Override
 	public void save(String fileName) {
-		//  saving persons data into ObjectOutputStream
-		log.info("saved to file");
-		ArrayList<Person> listPerson = (ArrayList<Person>) greetingsMap.values()
-				.stream()
-				.collect(Collectors.toList());
-		if (Files.exists(Path.of(fileName))){
-		try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(fileName))) {
-			
-			stream.writeObject(listPerson);
+		try(ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileName))) {
+			output.writeObject(new ArrayList<Person>(greetingsMap.values()));
+			log.info("persons data have been saved");
 		} catch (Exception e) {
-			 // on webinar: this better: 
-			//throw new RuntimeException(e);
-			log.error("smth wrong to write into file " + fileName);
-			throw new RuntimeException(String.format("smth wrong to write into file %s", fileName));
-			
-		}
-		} else {
-			log.error("no file for save "+fileName);
+			log.error("{}", e);
 		}
 		
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void restore(String fileName)  {
-		// restoring from file using ObjectInputStream
-		log.info("restored from file");
-		if (Files.exists(Path.of(fileName))){
-		try(ObjectInputStream stream = new ObjectInputStream(new FileInputStream(fileName))) {
-			List<Person> listPerson = (List<Person>) stream.readObject();
-			
-			listPerson
-			.forEach(p -> addPerson(p));
-		
-					
-		}  catch (Exception e) {
-			log.error("smth wrong to read from file " + fileName);
-			//on webinar: this better:
-			//throw new RuntimeException(e.toString());
-			throw new RuntimeException(String.format("smth wrong to read from file %s", fileName));
-		}
-		} else {
-			log.error("no file for restore "+fileName);
+	public void restore(String fileName) {
+		try(ObjectInputStream input =
+				new ObjectInputStream(new FileInputStream(fileName))) {
+			List<Person> employeesList = (List<Person>) input.readObject();
+			employeesList.forEach(this::addPerson);
+			log.info("restored from file");
+		} catch (FileNotFoundException e) {
+			log.warn("No file with data found");
+		} catch (Exception e) {
+			log.error("{}", e);
 		}
 		
 		
 	}
 	@PostConstruct
 	void restoreFromFile() {
-		log.info("restore file "+fileName);
 		restore(fileName);
+		
 	}
 	@PreDestroy
 	void saveToFile() {
 		save(fileName);
-		log.info("save file "+fileName);
 	}
 
 }
