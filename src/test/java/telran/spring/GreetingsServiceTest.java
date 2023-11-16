@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.*;
 
@@ -29,6 +31,12 @@ Person personNormalUpdated = new Person(123, "Vasya", "Lod", "vasya@gmail.com",
 		"054-1234567");
 Person personNotFound = new Person(500, "Vasya", "Lod", "vasya@gmail.com",
 		"054-1234567");
+Person personNormal2 = new Person (131, "Nir", "Tel-Aviv", "nir@gmail.com",
+		"058-1234567");
+List <Person> listByCity = new ArrayList<>();
+String city = "Tel-Aviv";
+
+
 @BeforeAll
 static void deleteFile() throws IOException {
 	Files.deleteIfExists(Path.of("test.data"));
@@ -72,9 +80,49 @@ static void deleteFile() throws IOException {
     	assertThrowsExactly(NotFoundException.class,
     			() -> greetingsService.updatePerson(personNotFound));
     }
-    @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
     @Test
     @Order(8)
+    void addPersonNormal2Test() {
+    	assertEquals(personNormal2, greetingsService.addPerson(personNormal2));
+    }
+    @Test
+    @Order(9)
+    void getPersonByCityTest() {
+    	listByCity.add(personNormal2);
+    	assertEquals(listByCity, greetingsService.getPersonsByCity(city));
+    }
+    @Test
+    @Order(10)
+    void deletePersonTest() {
+    	assertEquals(personNormal2, greetingsService.deletePerson(131));
+    }
+       @Test
+    @Order(11)
+    void deleteNotExistsTest() {
+    	assertThrowsExactly(NotFoundException.class,
+    			() -> greetingsService.deletePerson(131));
+    }
+       @Test
+       @Order(12)
+       void getPersonByCityEmpty() {
+    	 listByCity.remove(personNormal2);
+    	 assertEquals(listByCity, greetingsService.getPersonsByCity(city));
+       }
+    @Test
+    @Order(13)
+    void getGreetingsTest() {
+    	String helloMessage = "Hello, Vasya";
+    	assertEquals (helloMessage, greetingsService.getGreetings(123));
+    }
+    @Test
+    @Order(14)
+    void getGreetingsUnknownTest() {
+    	String helloMessage = "Hello, unknown guest";
+    	assertEquals (helloMessage, greetingsService.getGreetings(500));
+    }
+    @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+    @Test
+    @Order(15)
     void persistenceTest() {
     	assertEquals(personNormalUpdated,greetingsService.getPerson(123));
     	
