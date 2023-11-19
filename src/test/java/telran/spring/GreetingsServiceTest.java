@@ -127,4 +127,20 @@ static void deleteFile() throws IOException {
     	assertEquals(personNormalUpdated,greetingsService.getPerson(123));
     	
     }
+    @Test     //on CW61
+    @Order(16)
+    void getPersonsByCityTest2() {
+    	List<Person> expected = List.of(personNormalUpdated);
+    	assertIterableEquals(expected, greetingsService.getPersonsByCity("Lod"));
+   assertTrue(greetingsService.getPersonsByCity("Rehovot").isEmpty());
+    }
+    @Test  //on CW61
+    @Order(17)
+       void deleteTest2() {
+    	assertEquals(personNormalUpdated, greetingsService.deletePerson(123));
+    	assertTrue(greetingsService.getPersonsByCity("Lod").isEmpty());
+    	assertTrue(greetingsService.getPersonsByCity("Rehovot").isEmpty());
+    	assertThrowsExactly(NotFoundException.class, () -> greetingsService.deletePerson(123));
+    }
+    
 }
