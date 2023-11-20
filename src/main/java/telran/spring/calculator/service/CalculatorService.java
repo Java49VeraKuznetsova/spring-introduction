@@ -1,9 +1,9 @@
 package telran.spring.calculator.service;
 
-public interface CalculatorService {
+import telran.spring.calculator.dto.OperationData;
 
-	double multiply (double op1, double op2);
-	double sum (double op1, double op2);
-	double substract (double op1, double op2);
-	double divide(double op1, double op2);
+public interface CalculatorService {
+	String calculate(OperationData operationData);
+	String getCalculationType();
+	
 }
